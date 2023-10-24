@@ -1,7 +1,8 @@
 import javax.swing.*;
+import java.util.Random;
 
 public class MainWindow {
-    private JPanel panel1;
+    private JPanel mainPanel;
     private JComboBox comboBoxEntranceSpeed;
     private JComboBox comboBoxExitSpeed;
     private JPanel carPark0;
@@ -16,4 +17,62 @@ public class MainWindow {
     private JPanel carPark9;
     private JPanel carPark10;
     private JPanel carPark11;
+
+    private static JPanel[] spaces;
+
+    public MainWindow()
+    {
+        loadSpaces();
+
+
+    }
+
+    private void loadSpaces()
+    {
+        spaces = new JPanel[12];
+        spaces[0] = carPark0;
+        spaces[1] = carPark1;
+        spaces[2] = carPark2;
+        spaces[3] = carPark3;
+        spaces[4] = carPark4;
+        spaces[5] = carPark5;
+        spaces[6] = carPark6;
+        spaces[7] = carPark7;
+        spaces[8] = carPark8;
+        spaces[9] = carPark9;
+        spaces[10] = carPark10;
+        spaces[11] = carPark11;
+
+        for(JPanel space : spaces)
+            space.setBackground(java.awt.Color.RED);
+    }
+
+
+    public static void UpdateSpaceStatus(int nextEmptySpace, boolean isOccupied)
+    {
+        spaces[nextEmptySpace].setBackground(isOccupied ? java.awt.Color.RED : java.awt.Color.GREEN);
+    }
+
+    public static void main(String[] args)
+    {
+        JFrame frame = new JFrame("Productor - Consumidor");
+        frame.setContentPane(new MainWindow().mainPanel);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+
+        ParkingLot parkingLot = new ParkingLot();
+        Random random = new Random();
+
+        int randomEntranceDelay = random.nextInt(3) + 1;
+        int randomExitDelay = random.nextInt(3) + 1;
+
+        int entranceDelay = randomEntranceDelay * 500;
+        int exitDelay = randomExitDelay * 500;
+
+        new VehicleEntry(parkingLot, entranceDelay);
+        new VehicleExit(parkingLot, exitDelay);
+    }
+
 }
