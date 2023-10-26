@@ -19,15 +19,33 @@ public class MainWindow {
     private JPanel carPark11;
 
     private static JPanel[] spaces;
+    private String[] delayOptions = {"0.5 segundos", "1 segundo", "2 segundos"};
 
     public MainWindow()
     {
-        loadSpaces();
+        loadCarParks();
 
-
+        for(String option : delayOptions) {
+            comboBoxEntranceSpeed.addItem(option);
+            comboBoxExitSpeed.addItem(option);
+        }
     }
 
-    private void loadSpaces()
+    private long getDelay(String selectedOption)
+    {
+        switch(selectedOption) {
+            case "0.5 segundos":
+                return 500;
+            case "1 segundo":
+                return 1000;
+            case "2 segundos":
+                return 2000;
+            default:
+                return 0;
+        }
+    }
+
+    private void loadCarParks()
     {
         spaces = new JPanel[12];
         spaces[0] = carPark0;
@@ -44,7 +62,7 @@ public class MainWindow {
         spaces[11] = carPark11;
 
         for(JPanel space : spaces)
-            space.setBackground(java.awt.Color.RED);
+            space.setBackground(java.awt.Color.GREEN);
     }
 
 
@@ -62,6 +80,7 @@ public class MainWindow {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
+        /*
         ParkingLot parkingLot = new ParkingLot();
         Random random = new Random();
 
@@ -73,6 +92,7 @@ public class MainWindow {
 
         new VehicleEntry(parkingLot, entranceDelay);
         new VehicleExit(parkingLot, exitDelay);
+        */
     }
 
 }
