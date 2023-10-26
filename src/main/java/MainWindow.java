@@ -20,6 +20,7 @@ public class MainWindow {
 
     private static JPanel[] spaces;
     private String[] delayOptions = {"0.5 segundos", "1 segundo", "2 segundos"};
+    private int[] delayValues = {500, 1000, 2000};
     private long entranceDelay;
     private long exitDelay;
 
@@ -29,11 +30,11 @@ public class MainWindow {
         loadComboBoxOptions();
 
         comboBoxEntranceSpeed.addActionListener(e -> {
-            entranceDelay = getDelay(comboBoxEntranceSpeed.getSelectedIndex());
+            entranceDelay = delayValues[comboBoxEntranceSpeed.getSelectedIndex()];
         });
 
         comboBoxExitSpeed.addActionListener(e -> {
-            exitDelay = getDelay(comboBoxExitSpeed.getSelectedIndex());
+            exitDelay = delayValues[comboBoxExitSpeed.getSelectedIndex()];
         });
     }
 
@@ -68,14 +69,10 @@ public class MainWindow {
             space.setBackground(java.awt.Color.GREEN);
     }
 
-    private long getDelay(int selectedOption)
+    private long getRandomDelay()
     {
-        return switch (selectedOption) {
-            case 0 -> 500;
-            case 1 -> 1000;
-            case 2 -> 2000;
-            default -> 0;
-        };
+        Random random = new Random();
+        return delayValues[random.nextInt(3)];
     }
 
     public static void UpdateSpaceStatus(int nextEmptySpace, boolean isOccupied)
@@ -91,20 +88,6 @@ public class MainWindow {
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-
-        /*
-        ParkingLot parkingLot = new ParkingLot();
-        Random random = new Random();
-
-        int randomEntranceDelay = random.nextInt(3) + 1;
-        int randomExitDelay = random.nextInt(3) + 1;
-
-        int entranceDelay = randomEntranceDelay * 500;
-        int exitDelay = randomExitDelay * 500;
-
-        new VehicleEntry(parkingLot, entranceDelay);
-        new VehicleExit(parkingLot, exitDelay);
-        */
     }
 
 }
