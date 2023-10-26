@@ -17,17 +17,30 @@ public class MainWindow {
     private JPanel carPark9;
     private JPanel carPark10;
     private JPanel carPark11;
+    private JLabel labelEntranceRandom;
+    private JLabel labelExitRandom;
 
     private static JPanel[] spaces;
     private String[] delayOptions = {"0.5 segundos", "1 segundo", "2 segundos"};
     private int[] delayValues = {500, 1000, 2000};
-    private long entranceDelay;
-    private long exitDelay;
+    private int entranceDelay;
+    private int exitDelay;
 
     public MainWindow()
     {
         loadCarParks();
         loadComboBoxOptions();
+
+        entranceDelay = getRandomDelay();
+        exitDelay = getRandomDelay();
+
+        labelEntranceRandom.setText("Tiempo de entrada al inicializar: " + entranceDelay + " ms");
+        labelExitRandom.setText("Tiempo de salida al inicializar: " + exitDelay + " ms");
+
+        ParkingLot parkingLot = new ParkingLot();
+        new VehicleEntry(parkingLot, entranceDelay).start();
+        new VehicleExit(parkingLot, exitDelay).start();
+
 
         comboBoxEntranceSpeed.addActionListener(e -> {
             entranceDelay = delayValues[comboBoxEntranceSpeed.getSelectedIndex()];
@@ -69,7 +82,7 @@ public class MainWindow {
             space.setBackground(java.awt.Color.GREEN);
     }
 
-    private long getRandomDelay()
+    private int getRandomDelay()
     {
         Random random = new Random();
         return delayValues[random.nextInt(3)];
