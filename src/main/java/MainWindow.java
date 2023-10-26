@@ -20,28 +20,31 @@ public class MainWindow {
 
     private static JPanel[] spaces;
     private String[] delayOptions = {"0.5 segundos", "1 segundo", "2 segundos"};
+    private long entranceDelay;
+    private long exitDelay;
 
     public MainWindow()
     {
         loadCarParks();
+        loadComboBoxOptions();
+
+        comboBoxEntranceSpeed.addActionListener(e -> {
+            entranceDelay = getDelay(comboBoxEntranceSpeed.getSelectedIndex());
+        });
+
+        comboBoxExitSpeed.addActionListener(e -> {
+            exitDelay = getDelay(comboBoxExitSpeed.getSelectedIndex());
+        });
+    }
+
+    private void loadComboBoxOptions()
+    {
+        comboBoxEntranceSpeed.addItem("");
+        comboBoxExitSpeed.addItem("");
 
         for(String option : delayOptions) {
             comboBoxEntranceSpeed.addItem(option);
             comboBoxExitSpeed.addItem(option);
-        }
-    }
-
-    private long getDelay(String selectedOption)
-    {
-        switch(selectedOption) {
-            case "0.5 segundos":
-                return 500;
-            case "1 segundo":
-                return 1000;
-            case "2 segundos":
-                return 2000;
-            default:
-                return 0;
         }
     }
 
@@ -65,6 +68,15 @@ public class MainWindow {
             space.setBackground(java.awt.Color.GREEN);
     }
 
+    private long getDelay(int selectedOption)
+    {
+        return switch (selectedOption) {
+            case 0 -> 500;
+            case 1 -> 1000;
+            case 2 -> 2000;
+            default -> 0;
+        };
+    }
 
     public static void UpdateSpaceStatus(int nextEmptySpace, boolean isOccupied)
     {
