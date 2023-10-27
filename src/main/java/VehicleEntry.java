@@ -8,15 +8,16 @@ public class VehicleEntry extends Thread {
         this.delay = delay;
     }
 
+    @Override
     public void run()
     {
-        while(true) {
-            try {
+        try {
+            while (!Thread.currentThread().isInterrupted()) {
                 parkingLot.park();
                 Thread.sleep(delay);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
             }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
     

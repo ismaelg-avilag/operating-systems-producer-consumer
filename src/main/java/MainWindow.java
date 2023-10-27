@@ -26,6 +26,9 @@ public class MainWindow {
     private int entranceDelay;
     private int exitDelay;
 
+    Thread entranceTread = null;
+    Thread exitThread = null;
+
     public MainWindow()
     {
         loadCarParks();
@@ -38,24 +41,44 @@ public class MainWindow {
         labelExitRandom.setText("Tiempo de salida al inicializar: " + exitDelay + " ms");
 
         ParkingLot parkingLot = new ParkingLot();
-        new VehicleEntry(parkingLot, entranceDelay).start();
-        new VehicleExit(parkingLot, exitDelay).start();
 
+        entranceTread = new VehicleEntry(parkingLot, entranceDelay);
+        exitThread = new VehicleExit(parkingLot, exitDelay);
+
+        entranceTread.start();
+        exitThread.start();
 
         comboBoxEntranceSpeed.addActionListener(e -> {
-            entranceDelay = delayValues[comboBoxEntranceSpeed.getSelectedIndex()];
+            if(entranceTread != null &&entranceTread.isAlive()) {
+                entranceTread.interrupt();
+                try {
+                    entranceTread.join();
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+            entranceTread = new VehicleEntry(parkingLot, delayValues[comboBoxEntranceSpeed.getSelectedIndex()]);
+            labelEntranceRandom.setText("Nueva velocidad seleccionada: " + delayOptions[comboBoxEntranceSpeed.getSelectedIndex()]);
         });
 
         comboBoxExitSpeed.addActionListener(e -> {
-            exitDelay = delayValues[comboBoxExitSpeed.getSelectedIndex()];
+            if(exitThread != null && exitThread.isAlive()) {
+                exitThread.interrupt();
+                try {
+                    exitThread.join();
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+            exitThread = new VehicleExit(parkingLot, delayValues[comboBoxExitSpeed.getSelectedIndex()]);
+            labelExitRandom.setText("Nueva velocidad seleccionada: " + delayOptions[comboBoxExitSpeed.getSelectedIndex()]);
         });
     }
 
     private void loadComboBoxOptions()
     {
-        comboBoxEntranceSpeed.addItem("");
-        comboBoxExitSpeed.addItem("");
-
         for(String option : delayOptions) {
             comboBoxEntranceSpeed.addItem(option);
             comboBoxExitSpeed.addItem(option);

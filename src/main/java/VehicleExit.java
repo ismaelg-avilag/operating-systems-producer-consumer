@@ -1,4 +1,4 @@
-public class VehicleExit extends Thread{
+public class VehicleExit extends Thread {
     private ParkingLot parkingLot;
     int delay;
 
@@ -11,13 +11,13 @@ public class VehicleExit extends Thread{
     @Override
     public void run()
     {
-        while(true) {
-            try {
+        try {
+            while (!Thread.currentThread().isInterrupted()) {
                 parkingLot.leave();
                 Thread.sleep(delay);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
             }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
